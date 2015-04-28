@@ -19,7 +19,7 @@ pid=$!
 sleep 1
 for ((i=1 ; $i<=$num_clients ; i++))
 {
-	./client $(($MAX_PACKS*10)) $num_sockets 127.0.0.1 > /dev/null &
+	./client $(($MAX_PACKS*10)) 127.0.0.1 $num_port > /dev/null &
 }
 wait $pid
 
