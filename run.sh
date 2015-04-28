@@ -11,7 +11,7 @@ echo nop > /sys/kernel/debug/tracing/current_tracer
 echo 0 > /sys/kernel/debug/tracing/tracing_on
 echo function_graph > /sys/kernel/debug/tracing/current_tracer
 
-num_port=1
+num_port=1820
 num_threads=1
 num_clients=4
 ./server $MAX_PACKS $num_threads $num_port &
