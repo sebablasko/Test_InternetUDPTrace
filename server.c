@@ -87,8 +87,6 @@ int main(int argc, char **argv){
 	//Recuperar puerto destino
 	DESTINATION_PORT = atoi(argv[3]);
 
-	if(mostrarInfo)	printf("Diseño: \n\t%d: Threads \n\t%d: Sockets\n\t%d: Paquetes a Enviar\n", NTHREADS, NSOCKETS, MAX_PACKS);
-
 	//Crear Socket
 	int socket_fd;
 	char ports[10];
