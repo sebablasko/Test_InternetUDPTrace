@@ -3,6 +3,12 @@
 #include <stdlib.h>
 #include "../ssocket/ssocket.h"
 
+#include <string.h>
+#include <netdb.h>
+#include <signal.h>
+#include <fcntl.h>
+#include <unistd.h>
+
 //Definiciones
 #define BUF_SIZE 10
 #define FIRST_PORT 1820
