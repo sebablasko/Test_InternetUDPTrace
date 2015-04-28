@@ -1,4 +1,4 @@
-all: server client devnull
+all: server client
 
 server: server.o ../ssocket/ssocket.o
 	gcc server.o ../ssocket/ssocket.o -o server -lpthread
