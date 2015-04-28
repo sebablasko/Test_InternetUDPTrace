@@ -154,7 +154,7 @@ int main(int argc, char **argv){
 		// Y cierre de archivos
 		close(trace_fd);
 		close(pid_trace_fd);
-		close(marker_fd)
+		close(marker_fd);
 
 	//Medir Fin
 	gettimeofday(&dateFin, NULL);
