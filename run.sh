@@ -9,7 +9,8 @@ echo "Done"
 # Limpiar Ftrace
 echo nop > /sys/kernel/debug/tracing/current_tracer
 echo 0 > /sys/kernel/debug/tracing/tracing_on
-echo function_graph > /sys/kernel/debug/tracing/current_tracer
+#echo function_graph > /sys/kernel/debug/tracing/current_tracer
+echo function > /sys/kernel/debug/tracing/current_tracer
 
 num_port=1820
 num_threads=1
