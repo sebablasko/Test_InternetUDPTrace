@@ -12,4 +12,4 @@ client: client.o ../ssocket/ssocket.o
 rm_client:
 	rm client client.o
 
-clean: rm_client rm_server rm_devnull
+clean: rm_client rm_server
