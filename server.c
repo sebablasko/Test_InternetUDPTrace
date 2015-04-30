@@ -1,3 +1,5 @@
+#define _GNU_SOURCE
+
 #include <sys/time.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -7,6 +9,7 @@
 #include <netdb.h>
 #include <signal.h>
 #include <fcntl.h>
+#include <sched.h>
 #include <unistd.h>
 
 //Definiciones
@@ -17,7 +20,8 @@
 int first_pack = 0;
 struct timeval dateInicio, dateFin;
 pthread_mutex_t lock;
-int mostrarInfo = 0;
+int mostrarInfo = 1;
+int distribuiteCPUs = 1;
 int MAX_PACKS = 1;
 int NTHREADS = 1;
 int DESTINATION_PORT = FIRST_PORT;
@@ -41,7 +45,8 @@ llamadaHilo(int socket_fd){
 	char buf[BUF_SIZE];
 	int lectura;
 
-	if(mostrarInfo) printf("Socket Operativo: %d\n", socket_fd);
+	int actualCPU = sched_getcpu();
+	if(mostrarInfo) printf("Socket Operativo: %d, \t CPU: %d\n", socket_fd, actualCPU);
 
 	int i;
 	int paquetesParaAtender = MAX_PACKS/NTHREADS;
@@ -93,6 +98,10 @@ int main(int argc, char **argv){
 	//Recuperar puerto destino
 	DESTINATION_PORT = atoi(argv[3]);
 
+	//Info
+	int totalCPUs = sysconf(_SC_NPROCESSORS_ONLN);
+	if(mostrarInfo) printf("Total de Procesadores disponibles: %d\n", totalCPUs);
+
 	//Crear Socket
 	int socket_fd;
 	char ports[10];
@@ -138,10 +147,24 @@ int main(int argc, char **argv){
 		sprintf(tmp,"%d", pid);
 		write(pid_trace_fd, tmp, sizeof(tmp));
 
+	//Configurar Threads
+    pthread_attr_t attr;
+    cpu_set_t cpus;
+    pthread_attr_init(&attr);
+
 	//Lanzar Threads
 	int i;
 	for(i=0; i < NTHREADS; i++) {
-		pthread_create(&pids[i], NULL, llamadaHilo, socket_fd);
+		CPU_ZERO(&cpus);
+		CPU_SET(i%totalCPUs, &cpus);
+		pthread_attr_setaffinity_np(&attr, sizeof(cpu_set_t), &cpus);
+
+		if(distribuiteCPUs){
+			pthread_create(&pids[i], &attr, llamadaHilo, socket_fd);
+		}else{
+			pthread_create(&pids[i], NULL, llamadaHilo, socket_fd);
+		}
+		
 	}
 
 	//Esperar Threads
