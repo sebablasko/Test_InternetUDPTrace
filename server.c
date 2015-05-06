@@ -75,6 +75,8 @@ llamadaHilo(int socket_fd){
 			pthread_mutex_unlock(&lock);
 		}
 	}
+
+	if(mostrarInfo) printf("Fin Socket Operativo: %d, \t CPU: %d\n", socket_fd, actualCPU);
 }
 
 int main(int argc, char **argv){
